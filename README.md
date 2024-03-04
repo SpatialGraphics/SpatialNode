@@ -10,7 +10,7 @@ simple graph visualization and editing or extended further for using the
 [Dataflow paradigm](https://en.wikipedia.org/wiki/Dataflow_programming) .
 
 The library is written using the Model-View approach. The whole graph structure
-is defined by a class derived from ``AbstractGraphModel``.  It is possible to
+is defined by a class derived from ``AbstractGraphModel``. It is possible to
 create or add Nodes and Connections. The underlying data structures could be of
 any arbitrary type or representation.
 
@@ -30,3 +30,8 @@ The node's algorithm is triggered upon arriving of any new input data. The
 computed result is propagated to the output connections. Each new connection
 fetches available data and propagates is further. Each change in the source node
 is immediately propagated through all the connections updating the whole graph.
+
+## Acknowledge
+
+This project is forked form [nodeeditor](https://github.com/paceholder/nodeeditor) originally but rewrite to pure python
+project, which can integrate with python package well.
