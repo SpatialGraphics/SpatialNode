@@ -18,6 +18,8 @@ An instance of ``AbstractGraphModel`` could or could not be attached to
 specialized ``QGraphicsScene`` and ``QGraphicsView`` objects. I.e. the so-called
 "headless" `modus operandi` is possible.
 
+![](./docs/capture.png)
+
 ## Data Flow Paradigm
 
 The extended model class ``DataFlowGraphModel`` allows to register "processing
