@@ -1,9 +1,15 @@
-from abc import abstractmethod, ABC
+#  Copyright (c) 2024 Feng Yang
+#
+#  I am making my contributions/submissions to this project solely in my
+#  personal capacity and am not conveying any rights to any intellectual
+#  property of any third parties.
 
-from PySide6 import QtCore, QtGui, QtWidgets
+from abc import abstractmethod
+
+from PySide6 import QtCore
 
 
-class AbstractGraphModel(QtCore.QObject, ABC):
+class AbstractGraphModel(QtCore.QObject):
     def __init__(self):
         from SpatialNode.definitions import ConnectionId
 
@@ -11,85 +17,76 @@ class AbstractGraphModel(QtCore.QObject, ABC):
         self._shiftedByDynamicPortsConnections: list[ConnectionId] = []
 
     @abstractmethod
-    def newNodeId(self):
-        ...
+    def newNodeId(self): ...
 
     @abstractmethod
-    def allNodeIds(self):
-        ...
+    def allNodeIds(self): ...
 
     @abstractmethod
-    def allConnectionIds(self, node_id):
-        ...
+    def allConnectionIds(self, nodeId): ...
 
     @abstractmethod
-    def connections(self, node_id, port_type, index):
-        ...
+    def connections(self, nodeId, portType, index): ...
 
     @abstractmethod
-    def connectionExists(self, connection_id):
-        ...
+    def connectionExists(self, connectionId): ...
 
     @abstractmethod
-    def addNode(self, node_type=""):
-        ...
+    def addNode(self, nodeType=""): ...
 
     @abstractmethod
-    def connectionPossible(self, connection_id):
-        ...
+    def connectionPossible(self, connectionId): ...
 
-    def detachPossible(self, connection_id) -> bool:
+    def detachPossible(self, connectionId) -> bool:
         return True
 
     @abstractmethod
-    def addConnection(self, connection_id):
-        ...
+    def addConnection(self, connectionId): ...
 
     @abstractmethod
-    def nodeExists(self, node_id):
-        ...
+    def nodeExists(self, nodeId): ...
 
     @abstractmethod
-    def nodeData(self, node_id, role):
-        ...
+    def nodeData(self, nodeId, role): ...
 
     def nodeFlags(self, node_id):
         from SpatialNode.definitions import NodeFlag
+
         return NodeFlag.NoFlags
 
     @abstractmethod
-    def setNodeData(self, node_id, role, value) -> bool:
-        ...
+    def setNodeData(self, node_id, role, value) -> bool: ...
 
     @abstractmethod
-    def portData(self, node_id, port_type, index, role):
-        ...
+    def portData(self, node_id, port_type, index, role): ...
 
     @abstractmethod
-    def setPortData(self, node_id, port_type, index, value, role) -> bool:
-        ...
+    def setPortData(self, node_id, port_type, index, value, role) -> bool: ...
 
     @abstractmethod
-    def deleteConnection(self, connection_id) -> bool:
-        ...
+    def deleteConnection(self, connection_id) -> bool: ...
 
     @abstractmethod
-    def deleteNode(self, node_id) -> bool:
-        ...
+    def deleteNode(self, node_id) -> bool: ...
 
     def saveNode(self, node_id):
-        ...
+        return {}
 
     def loadNode(self, p: QtCore.QJsonArray):
-        ...
+        pass
 
     def portsAboutToBeDeleted(self, node_id, port_type, first, last):
         from SpatialNode.definitions import NodeRole, PortType
-        from SpatialNode.connection_id_utils import makeIncompleteConnectionId, makeCompleteConnectionId
+        from SpatialNode.connection_id_utils import (
+            makeIncompleteConnectionIdFromComplete,
+            makeCompleteConnectionId,
+        )
 
         self._shiftedByDynamicPortsConnections.clear()
 
-        portCountRole = NodeRole.InPortCount if port_type == PortType.In else NodeRole.OutPortCount
+        portCountRole = (
+            NodeRole.InPortCount if port_type == PortType.In else NodeRole.OutPortCount
+        )
         portCount = self.nodeData(node_id, portCountRole)
 
         if first > portCount - 1:
@@ -100,7 +97,7 @@ class AbstractGraphModel(QtCore.QObject, ABC):
 
         clampedLast = min(last, portCount - 1)
 
-        for portIndex in range(first, clampedLast):
+        for portIndex in range(first, clampedLast + 1):
             conns = self.connections(node_id, port_type, portIndex)
             for connectionId in conns:
                 self.deleteConnection(connectionId)
@@ -111,7 +108,7 @@ class AbstractGraphModel(QtCore.QObject, ABC):
             conns = self.connections(node_id, port_type, portIndex)
             for connectionId in conns:
                 # Erases the information about the port on one side;
-                c = makeIncompleteConnectionId(connectionId, port_type)
+                c = makeIncompleteConnectionIdFromComplete(connectionId, port_type)
                 c = makeCompleteConnectionId(c, node_id, portIndex - nRemovedPorts)
                 self._shiftedByDynamicPortsConnections.append(c)
                 self.deleteConnection(connectionId)
@@ -123,11 +120,16 @@ class AbstractGraphModel(QtCore.QObject, ABC):
 
     def portsAboutToBeInserted(self, node_id, port_type, first, last):
         from SpatialNode.definitions import NodeRole, PortType
-        from SpatialNode.connection_id_utils import makeIncompleteConnectionIdFromComplete, makeCompleteConnectionId
+        from SpatialNode.connection_id_utils import (
+            makeIncompleteConnectionIdFromComplete,
+            makeCompleteConnectionId,
+        )
 
         self._shiftedByDynamicPortsConnections.clear()
 
-        portCountRole = NodeRole.InPortCount if port_type == PortType.In else NodeRole.OutPortCount
+        portCountRole = (
+            NodeRole.InPortCount if port_type == PortType.In else NodeRole.OutPortCount
+        )
         portCount = self.nodeData(node_id, portCountRole)
 
         if first > portCount - 1:

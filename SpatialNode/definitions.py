@@ -7,8 +7,10 @@
 import sys
 from enum import *
 
+from PySide6 import QtCore
 
-class NodeRole(IntEnum):
+
+class NodeRole(IntFlag):
     """Constants used for fetching QVariant data from GraphModel."""
 
     Type = 0
@@ -33,7 +35,7 @@ class NodeRole(IntEnum):
     """Optional `QWidget * ` or `nullptr`"""
 
 
-class NodeFlag(IntEnum):
+class NodeFlag(IntFlag):
     """Specific flags regulating node features and appearance."""
 
     NoFlags = 0x0
@@ -43,11 +45,11 @@ class NodeFlag(IntEnum):
     Locked = 0x2
 
 
-class PortRole(IntEnum):
+class PortRole(IntFlag):
     """Constants for fetching port-related information from the GraphModel."""
 
     Data = 0
-    """std::shared_ptr<NodeData>"""
+    """NodeData"""
     DataType = 1
     """`QString` describing the port data type."""
     ConnectionPolicyRole = 2
@@ -58,7 +60,7 @@ class PortRole(IntEnum):
     """`QString` for port caption."""
 
 
-class ConnectionPolicy(Enum):
+class ConnectionPolicy(IntFlag):
     """
     Defines how many connections are possible to attach to ports.
     The values are fetched using PortRole::ConnectionPolicy.
@@ -70,7 +72,7 @@ class ConnectionPolicy(Enum):
     """Any number of connections possible for the port."""
 
 
-class PortType(IntEnum):
+class PortType(IntFlag):
     """Used for distinguishing input and output node ports."""
 
     In = 0
@@ -92,12 +94,19 @@ class ConnectionId:
      A unique connection identificator that stores
     out `NodeId`, out `PortIndex`, in `NodeId`, in `PortIndex`
     """
+
     outNodeId: NodeId
     outPortIndex: PortIndex
     inNodeId: NodeId
     inPortIndex: PortIndex
 
-    def __init__(self, outNodeId: NodeId, outPortIndex: PortIndex, inNodeId: NodeId, inPortIndex: PortIndex):
+    def __init__(
+        self,
+        outNodeId: NodeId,
+        outPortIndex: PortIndex,
+        inNodeId: NodeId,
+        inPortIndex: PortIndex,
+    ):
         self.outNodeId = outNodeId
         self.outPortIndex = outPortIndex
         self.inNodeId = inNodeId
@@ -108,3 +117,6 @@ def invertConnection(id: ConnectionId):
     """Inverts the Connection"""
     (id.outNodeId, id.inNodeId) = (id.inNodeId, id.outNodeId)
     (id.outPortIndex, id.inPortIndex) = (id.inPortIndex, id.outPortIndex)
+
+
+QJsonObject = dict[str, QtCore.QJsonValue]

@@ -5,7 +5,12 @@
 #  property of any third parties.
 
 from SpatialNode.connection_id_utils import makeIncompleteConnectionIdFromComplete
-from SpatialNode.definitions import ConnectionId, PortType, InvalidNodeId, InvalidPortIndex
+from SpatialNode.definitions import (
+    ConnectionId,
+    PortType,
+    InvalidNodeId,
+    InvalidPortIndex,
+)
 
 
 def test_make_incomplete_connection_id_from_complete():

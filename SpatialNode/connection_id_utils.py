@@ -3,8 +3,9 @@
 #  I am making my contributions/submissions to this project solely in my
 #  personal capacity and am not conveying any rights to any intellectual
 #  property of any third parties.
+import copy
 
-from PySide6 import QtCore
+from SpatialNode.definitions import QJsonObject, ConnectionId
 
 
 def getNodeId(portType, connectionId):
@@ -59,44 +60,66 @@ def isPortTypeValid(portType):
     return portType is not None
 
 
-def makeIncompleteConnectionId(connectedNodeId,
-                               connectedPort,
-                               connectedPortIndex):
-    from SpatialNode.definitions import InvalidPortIndex, InvalidNodeId, ConnectionId, PortType
+def makeIncompleteConnectionId(connectedNodeId, connectedPort, connectedPortIndex):
+    from SpatialNode.definitions import (
+        InvalidPortIndex,
+        InvalidNodeId,
+        ConnectionId,
+        PortType,
+    )
 
-    return ConnectionId(InvalidNodeId, InvalidPortIndex, connectedNodeId, connectedPortIndex) \
-        if connectedPort == PortType.In \
-        else ConnectionId(connectedNodeId, connectedPortIndex, InvalidNodeId, InvalidPortIndex)
+    return (
+        ConnectionId(
+            InvalidNodeId, InvalidPortIndex, connectedNodeId, connectedPortIndex
+        )
+        if connectedPort == PortType.In
+        else ConnectionId(
+            connectedNodeId, connectedPortIndex, InvalidNodeId, InvalidPortIndex
+        )
+    )
 
 
-def makeIncompleteConnectionIdFromComplete(connectionId,
-                                           portToDisconnect):
+def makeIncompleteConnectionIdFromComplete(connectionId, portToDisconnect):
     from SpatialNode.definitions import InvalidPortIndex, InvalidNodeId, PortType
 
+    newConnectionId = copy.deepcopy(connectionId)
     if portToDisconnect == PortType.Out:
-        connectionId.outNodeId = InvalidNodeId
-        connectionId.outPortIndex = InvalidPortIndex
+        newConnectionId.outNodeId = InvalidNodeId
+        newConnectionId.outPortIndex = InvalidPortIndex
     else:
-        connectionId.inNodeId = InvalidNodeId
-        connectionId.inPortIndex = InvalidPortIndex
-    return connectionId
+        newConnectionId.inNodeId = InvalidNodeId
+        newConnectionId.inPortIndex = InvalidPortIndex
+    return newConnectionId
 
 
-def makeCompleteConnectionId(incompleteConnectionId,
-                             nodeId,
-                             portIndex):
+def makeCompleteConnectionId(incompleteConnectionId, nodeId, portIndex):
     from SpatialNode.definitions import InvalidNodeId
 
-    if incompleteConnectionId.outNodeId == InvalidNodeId:
-        incompleteConnectionId.outNodeId = nodeId
-        incompleteConnectionId.outPortIndex = portIndex
+    newConnectionId = copy.deepcopy(incompleteConnectionId)
+    if newConnectionId.outNodeId == InvalidNodeId:
+        newConnectionId.outNodeId = nodeId
+        newConnectionId.outPortIndex = portIndex
     else:
-        incompleteConnectionId.inNodeId = nodeId
-        incompleteConnectionId.inPortIndex = portIndex
+        newConnectionId.inNodeId = nodeId
+        newConnectionId.inPortIndex = portIndex
 
-    return incompleteConnectionId
+    return newConnectionId
 
 
 def toJson(connId):
-    connJson = QtCore.QJsonDocument().object()
+    connJson = QJsonObject()
+
+    connJson["outNodeId"] = connId.outNodeId
+    connJson["outPortIndex"] = connId.outPortIndex
+    connJson["intNodeId"] = connId.inNodeId
+    connJson["inPortIndex"] = connId.inPortIndex
     return connJson
+
+
+def fromJson(connJson):
+    return ConnectionId(
+        connJson["outNodeId"],
+        connJson["outPortIndex"],
+        connJson["intNodeId"],
+        connJson["inPortIndex"],
+    )

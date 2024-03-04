@@ -1,120 +1,242 @@
+#  Copyright (c) 2024 Feng Yang
+#
+#  I am making my contributions/submissions to this project solely in my
+#  personal capacity and am not conveying any rights to any intellectual
+#  property of any third parties.
+
 from abc import abstractmethod, ABC
+from typing import Any
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from SpatialNode.definitions import NodeId, ConnectionId, PortIndex, PortType, NodeRole, NodeFlag, PortRole
-
+from SpatialNode.definitions import (
+    NodeId,
+    ConnectionId,
+    PortIndex,
+    PortType,
+    NodeRole,
+    NodeFlag,
+    PortRole,
+    QJsonObject,
+)
 
 class AbstractGraphModel(QtCore.QObject, ABC):
+    """
+    The central class in the Model-View approach. It delivers all kinds
+    of information from the backing user data structures that represent
+    the graph. The class allows to modify the graph structure: create
+    and remove nodes and connections.
+
+    We use two types of the unique ids for graph manipulations:
+     - NodeId
+     - ConnectionId
+    """
+
     def __init__(self):
+        self._shiftedByDynamicPortsConnections: list[ConnectionId] = []
         ...
 
     @abstractmethod
     def newNodeId(self) -> NodeId:
-        """Generates a new unique NodeId."""
+        """
+        Generates a new unique NodeId.
+        """
         ...
 
     def allNodeIds(self) -> set[NodeId]:
         """
         Returns the full set of unique Node Ids.
-
-        Model creator is responsible for generating unique `unsigned int`
-        Ids for all the nodes in the graph. From an Id it should be
-        possible to trace back to the model's internal representation of
-        the node.
         """
         ...
 
-    def allConnectionIds(self, node_id: NodeId) -> set[ConnectionId]:
-        """A collection of all input and output connections for the given `nodeId`."""
+    def allConnectionIds(self, nodeId: NodeId) -> set[ConnectionId]:
+        """
+        A collection of all input and output connections for the given `nodeId`.
+        """
         ...
 
-
     @abstractmethod
-    def connections(self, node_id: NodeId, port_type: PortType | None, index: PortIndex) -> set[ConnectionId]:
+    def connections(
+        self, nodeId: NodeId, portType: PortType | None, index: PortIndex
+    ) -> set[ConnectionId]:
         """
         returns all connected Node Ids for given port.
-
-        The returned set of nodes and port indices correspond to the type
-        opposite to the given `portType`.
         """
         ...
 
     @abstractmethod
-    def connectionExists(self, connection_id: ConnectionId) -> bool:
-        """Checks if two nodes with the given `connectionId` are connected."""
+    def connectionExists(self, connectionId: ConnectionId) -> bool:
+        """
+        Checks if two nodes with the given `connectionId` are connected.
+        """
         ...
 
     @abstractmethod
-    def addNode(self, node_type="") -> NodeId:
-        """Creates a new node instance in the derived class."""
+    def addNode(self, nodeType="") -> NodeId:
+        """
+        Creates a new node instance in the derived class.
+        """
         ...
 
     @abstractmethod
-    def connectionPossible(self, connection_id: ConnectionId) -> bool:
+    def connectionPossible(self, connectionId: ConnectionId) -> bool:
         """
         Model decides if a connection with a given connection Id possible.
         """
         ...
 
-    def detachPossible(self, connection_id: ConnectionId) -> bool:
-        """ Defines if detaching the connection is possible. """
+    def detachPossible(self, connectionId: ConnectionId) -> bool:
+        """
+        Defines if detaching the connection is possible.
+        """
         ...
 
     @abstractmethod
-    def addConnection(self, connection_id: ConnectionId):
-        """ Creates a new connection between two nodes. """
+    def addConnection(self, connectionId: ConnectionId) -> None:
+        """
+        Creates a new connection between two nodes.
+        """
         ...
 
     @abstractmethod
-    def nodeExists(self, node_id: NodeId) -> bool:
+    def nodeExists(self, nodeId: NodeId) -> bool:
+        """
+        returns `true` if there is data in the model associated with the given `nodeId`.
+        """
         ...
 
     @abstractmethod
-    def nodeData(self, node_id: NodeId, role: NodeRole):
-        """" Returns node-related data for requested NodeRole. """
+    def nodeData(self, nodeId: NodeId, role: NodeRole) -> Any:
+        """ "
+        Returns node-related data for requested NodeRole.
+        """
         ...
 
-    def nodeFlags(self, node_id: NodeId) -> NodeFlag:
+    def nodeFlags(self, nodeId: NodeId) -> NodeFlag: ...
+    @abstractmethod
+    def setNodeData(self, nodeId: NodeId, role: NodeRole, value: Any) -> bool:
+        """
+        Sets node properties.
+        """
         ...
 
     @abstractmethod
-    def setNodeData(self, node_id: NodeId, role: NodeRole, value) -> bool:
-        """ Sets node properties. """
+    def portData(
+        self,
+        nodeId: NodeId,
+        portType: PortType | None,
+        index: PortIndex,
+        role: PortRole,
+    ) -> Any:
+        """
+        Returns port-related data for requested NodeRole.
+        """
         ...
 
     @abstractmethod
-    def portData(self, node_id: NodeId, port_type: PortType | None, index: PortIndex, role: PortRole):
-        """ Returns port-related data for requested NodeRole. """
-        ...
-
+    def setPortData(
+        self,
+        nodeId: NodeId,
+        portType: PortType | None,
+        index: PortIndex,
+        value,
+        role: PortRole = PortRole.Data,
+    ) -> bool: ...
     @abstractmethod
-    def setPortData(self, node_id: NodeId, port_type: PortType | None, index: PortIndex, value,
-                    role: PortRole = PortRole.Data) -> bool:
-        ...
-
+    def deleteConnection(self, connectionId: ConnectionId) -> bool: ...
     @abstractmethod
-    def deleteConnection(self, connection_id: ConnectionId) -> bool:
+    def deleteNode(self, nodeId: NodeId) -> bool: ...
+    def saveNode(self, nodeId: NodeId) -> QJsonObject:
+        """
+        Reimplement the function if you want to store/restore the node's
+        inner state during undo/redo node deletion operations.
+        """
         ...
 
-    @abstractmethod
-    def deleteNode(self, node_id: NodeId) -> bool:
+    def loadNode(self, p: QJsonObject) -> None:
+        """
+        Reimplement the function if you want to support:
+
+           - graph save/restore operations,
+           - undo/redo operations after deleting the node.
+
+        QJsonObject must contain following fields:
+
+        ```
+        {
+        id : 5,
+        position : { x : 100, y : 200 },
+        internal-data {
+        "your model specific data here"
+         }
+        }
+        ```
+
+        The function must do almost exactly the same thing as the normal addNode().
+        The main difference is in a model-specific `inner-data` processing.
+        """
         ...
 
-    def saveNode(self, node_id: NodeId):
-        ...
+    def portsAboutToBeDeleted(
+        self,
+        nodeId: NodeId,
+        portType: PortType | None,
+        first: PortIndex,
+        last: PortIndex,
+    ) -> None:
+        """
+        Function clears connections attached to the ports that are scheduled to be
+        deleted. It must be called right before the model removes its old port data.
 
-    def loadNode(self, p: QtCore.QJsonArray):
-        ...
-
-    def portsAboutToBeDeleted(self, node_id: NodeId, port_type: PortType | None, first: PortIndex, last: PortIndex):
+        :param nodeId: Defines the node to be modified
+        :param portType: Is either PortType.In or PortType.Out
+        :param first: Index of the first port to be removed
+        :param last: Index of the last port to be removed
+        """
         ...
 
     def portsDeleted(self):
+        """
+        Signal emitted when model no longer has the old data associated with the
+        given port indices and when the node must be repainted.
+        """
         ...
 
-    def portsAboutToBeInserted(self, node_id: NodeId, port_type: PortType | None, first: PortIndex, last: PortIndex):
+    def portsAboutToBeInserted(
+        self,
+        nodeId: NodeId,
+        portType: PortType | None,
+        first: PortIndex,
+        last: PortIndex,
+    ) -> None:
+        """
+        Signal emitted when model is about to create new ports on the given node.
+        :param nodeId:
+        :param portType:
+        :param first: Is the first index of the new port after insertion.
+        :param last: Is the last index of the new port after insertion.
+        :return:
+        """
         ...
 
-    def portsInserted(self):
+    def portsInserted(self) -> None:
+        """
+        Function re-creates the connections that were shifted during the port
+        insertion. After that the node is updated.
+        """
         ...
+    connectionCreated: QtCore.Signal(ConnectionId)
+
+    connectionDeleted: QtCore.Signal(ConnectionId)
+
+    nodeCreated: QtCore.Signal(NodeId)
+
+    nodeDeleted: QtCore.Signal(NodeId)
+
+    nodeUpdated: QtCore.Signal(NodeId)
+
+    nodeFlagsUpdated: QtCore.Signal(NodeId)
+
+    nodePositionUpdated: QtCore.Signal(NodeId)
+
+    modelReset: QtCore.Signal()

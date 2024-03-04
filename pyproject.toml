@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SpatialNode"
+version = "0.0.1"
+description = "a node graph framework"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+keywords = ["node editor", "pyside6"]
+
+authors = [
+    { name = "yangfengzzz", email = "yangfengzzz@hotmail.com" }
+]
+maintainers = [
+    { name = "yangfengzzz", email = "yangfengzzz@hotmail.com" }
+]
+
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 3 - Alpha",
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Graphics",
+    # Pick your license as you wish
+    "License :: OSI Approved :: MIT License",
+]
+
+
+dependencies = [
+    "PySide6",
+    "PySide6_Addons",
+    "PySide6_Essentials",
+    "shiboken6"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/SpatialForce/SpatialNode"
+"Bug Reports" = "https://github.com/SpatialForce/SpatialNode/issues"
+"Source" = "https://github.com/SpatialForce/SpatialNode"
