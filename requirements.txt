@@ -1,4 +1,15 @@
+black==24.2.0
+build==1.1.1
+click==8.1.7
+iniconfig==2.0.0
+mypy-extensions==1.0.0
+packaging==23.2
+pathspec==0.12.1
+platformdirs==4.2.0
+pluggy==1.4.0
+pyproject_hooks==1.0.0
 PySide6==6.6.2
 PySide6_Addons==6.6.2
 PySide6_Essentials==6.6.2
+pytest==8.0.2
 shiboken6==6.6.2
