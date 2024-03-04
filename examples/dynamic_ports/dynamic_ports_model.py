@@ -87,6 +87,10 @@ class DynamicPortsModel(sNode.AbstractGraphModel):
 
     @override
     def nodeData(self, nodeId, role):
+        self._nodeGeometryData.setdefault(
+            nodeId, sNode.NodeGeometryData(QtCore.QSize(0, 0), QtCore.QPointF())
+        )
+        self._nodePortCounts.setdefault(nodeId, DynamicPortsModel.NodePortCount())
         match role:
             case sNode.NodeRole.Type:
                 return "Default Node Type"
