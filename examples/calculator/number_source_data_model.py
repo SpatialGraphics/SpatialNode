@@ -6,7 +6,7 @@
 
 from typing import override
 
-from PySide6 import QtWidgets, QtGui
+from PySide6 import QtWidgets, QtGui, QtCore
 
 import SpatialNode as sNode
 from examples.calculator.decimal_data import DecimalData
@@ -32,8 +32,8 @@ class NumberSourceDataModel(sNode.NodeDelegateModel):
 
     @override
     def save(self):
-        modelJson = self.save()
-        modelJson["number"] = self._number.number()
+        modelJson = super().save()
+        modelJson["number"] = QtCore.QJsonValue(self._number.number())
 
         return modelJson
 
@@ -48,7 +48,7 @@ class NumberSourceDataModel(sNode.NodeDelegateModel):
                 self._number = DecimalData(d)
 
                 if self._lineEdit:
-                    self._lineEdit.setText(strNum)
+                    self._lineEdit.setText(str(strNum))
 
     @override
     def nPorts(self, portType):

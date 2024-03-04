@@ -127,15 +127,15 @@ class DataFlowGraphicsScene(BasicGraphicsScene):
         if not isinstance(self._graphModel, DataFlowGraphModel):
             raise RuntimeError("_graphModel must be a DataFlowGraphModel")
 
-        fileName = QtWidgets.QFileDialog.getSaveFileName(
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
             None, "Open Flow Scene", QtCore.QDir.homePath(), "Flow Scene Files (*.flow)"
         )
 
         if len(fileName) > 0:
-            if not fileName[0].endswith("flow"):
-                fileName[0] += ".flow"
+            if not fileName.endswith("flow"):
+                fileName += ".flow"
 
-            file = QtCore.QFile(fileName[0])
+            file = QtCore.QFile(fileName)
             if file.open(QtCore.QIODevice.OpenModeFlag.WriteOnly):
                 file.write(QtCore.QJsonDocument(self._graphModel.save()).toJson())
 

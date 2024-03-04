@@ -38,9 +38,9 @@ def createSaveRestoreMenu(
     loadAction = menu.addAction("Load Scene")
 
     def save():
-        fileName = QtWidgets.QFileDialog.getSaveFileName(
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
             None, "Open Flow Scene", QtCore.QDir.homePath(), "Flow Scene Files (*.flow)"
-        )[0]
+        )
 
         if len(fileName) > 0:
             if not fileName.endswith("flow"):
