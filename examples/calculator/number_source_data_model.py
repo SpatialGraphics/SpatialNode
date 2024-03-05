@@ -94,10 +94,9 @@ class NumberSourceDataModel(sNode.NodeDelegateModel):
             self._lineEdit.setText(str(self._number.number()))
 
     def onTextEdited(self, string: str) -> None:
-        number = float(string)
-
-        if number:
+        try:
+            number = float(string)
             self._number = DecimalData(number)
             self.dataUpdated.emit(0)
-        else:
+        except ValueError:
             self.dataInvalidated.emit(0)
