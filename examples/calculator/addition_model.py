@@ -16,9 +16,15 @@ class AdditionModel(MathOperationDataModel):
     def caption(self):
         return "Addition"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "Addition"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(AdditionModel, AdditionModel.name(), "Operators")
 
     @override
     def compute(self):

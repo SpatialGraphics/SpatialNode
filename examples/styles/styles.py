@@ -14,7 +14,7 @@ from examples.styles.models import MyDataModel
 
 def registerDataModels():
     ret = sNode.NodeDelegateModelRegistry()
-    ret.registerModel(MyDataModel)
+    MyDataModel.register(ret)
     return ret
 
 

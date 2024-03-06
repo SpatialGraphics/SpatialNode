@@ -11,8 +11,7 @@ class NodeDelegateModelRegistry:
         self._categories = set()
         self._registeredItemCreators = {}
 
-    def registerModel(self, creator, category="Nodes"):
-        name = creator().name()
+    def registerModel(self, creator, name, category="Nodes"):
         if name not in self._registeredItemCreators:
             self._registeredItemCreators[name] = creator
             self._categories.add(category)

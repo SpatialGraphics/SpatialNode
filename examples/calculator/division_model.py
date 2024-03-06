@@ -34,9 +34,15 @@ class DivisionModel(MathOperationDataModel):
             case sNode.PortType.Out:
                 "Result"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "Division"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(DivisionModel, DivisionModel.name(), "Operators")
 
     @override
     def compute(self):

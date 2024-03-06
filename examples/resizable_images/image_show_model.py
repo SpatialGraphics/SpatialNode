@@ -34,9 +34,15 @@ class ImageShowModel(sNode.NodeDelegateModel):
     def caption(self):
         return "Image Display"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "ImageShowModel"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(ImageShowModel, ImageShowModel.name())
 
     def modelName(self):
         return "Resulting Image"

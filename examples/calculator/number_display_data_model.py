@@ -26,9 +26,17 @@ class NumberDisplayDataModel(sNode.NodeDelegateModel):
     def captionVisible(self):
         return False
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "Result"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(
+            NumberDisplayDataModel, NumberDisplayDataModel.name(), "Displays"
+        )
 
     @override
     def nPorts(self, portType):

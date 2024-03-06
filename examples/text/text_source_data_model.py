@@ -25,9 +25,15 @@ class TextSourceDataModel(sNode.NodeDelegateModel):
     def captionVisible(self):
         return False
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "TextSourceDataModel"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(TextSourceDataModel, TextSourceDataModel.name())
 
     @override
     def nPorts(self, portType):

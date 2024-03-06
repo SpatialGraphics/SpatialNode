@@ -15,8 +15,8 @@ from examples.text.text_source_data_model import TextSourceDataModel
 
 def registerDataModels():
     ret = sNode.NodeDelegateModelRegistry()
-    ret.registerModel(TextSourceDataModel)
-    ret.registerModel(TextDisplayDataModel)
+    TextSourceDataModel.register(ret)
+    TextDisplayDataModel.register(ret)
     return ret
 
 

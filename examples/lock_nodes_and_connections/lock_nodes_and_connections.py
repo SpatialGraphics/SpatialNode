@@ -18,7 +18,7 @@ from examples.lock_nodes_and_connections.delegate_node_model import (
 
 def registerDataModels():
     ret = sNode.NodeDelegateModelRegistry()
-    ret.registerModel(SimpleDataModel)
+    SimpleDataModel.register(ret)
     return ret
 
 

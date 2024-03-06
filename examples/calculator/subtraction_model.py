@@ -31,9 +31,15 @@ class SubtractionModel(MathOperationDataModel):
             case sNode.PortType.Out:
                 return "Result"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "Subtraction"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(SubtractionModel, SubtractionModel.name(), "Operators")
 
     @override
     def compute(self):

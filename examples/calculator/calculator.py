@@ -19,13 +19,12 @@ from examples.calculator.subtraction_model import SubtractionModel
 
 def registerDataModels():
     registry = sNode.NodeDelegateModelRegistry()
-    registry.registerModel(NumberSourceDataModel, "Sources")
-    registry.registerModel(NumberDisplayDataModel, "Displays")
-    registry.registerModel(AdditionModel, "Operators")
-    registry.registerModel(SubtractionModel, "Operators")
-    registry.registerModel(MultiplicationModel, "Operators")
-    registry.registerModel(DivisionModel, "Operators")
-
+    NumberSourceDataModel.register(registry)
+    NumberDisplayDataModel.register(registry)
+    AdditionModel.register(registry)
+    DivisionModel.register(registry)
+    MultiplicationModel.register(registry)
+    SubtractionModel.register(registry)
     return registry
 
 

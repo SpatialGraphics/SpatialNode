@@ -13,7 +13,7 @@ from PySide6 import QtWidgets
 
 def registerDataModels():
     ret = sNode.NodeDelegateModelRegistry()
-    ret.registerModel(NaiveDataModel)
+    NaiveDataModel.register(ret)
     return ret
 
 

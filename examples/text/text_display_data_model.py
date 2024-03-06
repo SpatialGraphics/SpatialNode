@@ -27,9 +27,15 @@ class TextDisplayDataModel(sNode.NodeDelegateModel):
     def captionVisible(self):
         return False
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "TextDisplayDataModel"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(TextDisplayDataModel, TextDisplayDataModel.name())
 
     @override
     def nPorts(self, portType):

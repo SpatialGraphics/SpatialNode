@@ -26,9 +26,17 @@ class NumberSourceDataModel(sNode.NodeDelegateModel):
     def captionVisible(self):
         return False
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "NumberSource"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(
+            NumberSourceDataModel, NumberSourceDataModel.name(), "Sources"
+        )
 
     @override
     def save(self):

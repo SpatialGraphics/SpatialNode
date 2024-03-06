@@ -5,7 +5,7 @@
 #  property of any third parties.
 
 from typing import override
-
+import SpatialNode as sNode
 from examples.calculator.decimal_data import DecimalData
 from examples.calculator.math_operation_data_model import MathOperationDataModel
 
@@ -15,9 +15,17 @@ class MultiplicationModel(MathOperationDataModel):
     def caption(self):
         return "Multiplication"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "Multiplication"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(
+            MultiplicationModel, MultiplicationModel.name(), "Operators"
+        )
 
     @override
     def compute(self):

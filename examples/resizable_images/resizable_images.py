@@ -15,8 +15,8 @@ from examples.resizable_images.image_show_model import ImageShowModel
 
 def registerDataModels():
     ret = sNode.NodeDelegateModelRegistry()
-    ret.registerModel(ImageShowModel)
-    ret.registerModel(ImageLoaderModel)
+    ImageShowModel.register(ret)
+    ImageLoaderModel.register(ret)
     return ret
 
 

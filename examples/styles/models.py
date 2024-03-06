@@ -20,9 +20,15 @@ class MyDataModel(sNode.NodeDelegateModel):
     def caption(self):
         return "My Data Model"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "MyDataModel"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(MyDataModel, MyDataModel.name())
 
     @override
     def save(self):

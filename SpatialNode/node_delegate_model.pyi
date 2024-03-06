@@ -43,13 +43,17 @@ class NodeDelegateModel(QtCore.QObject, Serializable, ABC):
         """
         ...
 
+    @staticmethod
     @abstractmethod
-    def name(self) -> str:
+    def name() -> str:
         """
         Name makes this model unique
         """
         ...
 
+    @staticmethod
+    @abstractmethod
+    def register(registry, *args, **kwargs): ...
     @override
     def save(self): ...
     @override

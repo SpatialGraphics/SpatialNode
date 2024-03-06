@@ -32,8 +32,13 @@ class NodeDelegateModel(QtCore.QObject, Serializable):
     def portCaption(self, port_type, port_index):
         return ""
 
+    @staticmethod
     @abstractmethod
-    def name(self): ...
+    def name(): ...
+
+    @staticmethod
+    @abstractmethod
+    def register(registry, *args, **kwargs): ...
 
     @override
     def save(self):

@@ -26,9 +26,15 @@ class NaiveDataModel(sNode.NodeDelegateModel):
     def caption(self):
         return "Naive Data Model"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "NaiveDataModel"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(NaiveDataModel, NaiveDataModel.name())
 
     @override
     def nPorts(self, portType):

@@ -37,9 +37,15 @@ class ImageLoaderModel(sNode.NodeDelegateModel):
     def caption(self):
         return "Image Source"
 
+    @staticmethod
     @override
-    def name(self):
+    def name():
         return "ImageLoaderModel"
+
+    @staticmethod
+    @override
+    def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
+        registry.registerModel(ImageLoaderModel, ImageLoaderModel.name())
 
     def modelName(self):
         return "Source Image"
