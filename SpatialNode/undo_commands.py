@@ -66,7 +66,7 @@ def insertSerializedItems(json, scene):
 
 
 def deleteSerializedItems(sceneJson, graphModel):
-    connectionJsonArray = sceneJson["connections"].toArray().toVariantList()
+    connectionJsonArray = sceneJson["connections"].toVariantList()
 
     for connection in connectionJsonArray:
         connId = fromJson(connection)

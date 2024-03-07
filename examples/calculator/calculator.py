@@ -38,11 +38,11 @@ def setStyle():
               "SelectedColor": "gray",
               "SelectedHaloColor": "deepskyblue",
               "HoveredColor": "deepskyblue",
-        
+
               "LineWidth": 3.0,
               "ConstructionLineWidth": 2.0,
               "PointDiameter": 10.0,
-        
+
               "UseDataDefinedColors": true
             }
           }
