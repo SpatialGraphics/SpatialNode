@@ -56,7 +56,10 @@ def insertSerializedItems(json, scene):
 
     connections = json.get("connections")
     if connections:
-        connJsonArray = connections.toVariantList()
+        if isinstance(connections, QtCore.QJsonArray):
+            connJsonArray = connections.toVariantList()
+        else:
+            connJsonArray = connections.toArray().toVariantList()
 
         for connection in connJsonArray:
             connId = fromJson(connection)
