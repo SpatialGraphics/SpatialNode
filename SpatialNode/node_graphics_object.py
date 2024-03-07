@@ -177,9 +177,7 @@ class NodeGraphicsObject(QtWidgets.QGraphicsObject):
         from SpatialNode.undo_commands import MoveNodeCommand
 
         if not self.isSelected():
-            if not event.modifiers().testFlag(
-                QtCore.Qt.KeyboardModifier.ControlModifier
-            ):
+            if QtCore.Qt.KeyboardModifier.ControlModifier not in event.modifiers():
                 self.scene().clearSelection()
             self.setSelected(True)
 

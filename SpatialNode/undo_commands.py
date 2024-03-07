@@ -256,7 +256,9 @@ class PasteCommand(QtGui.QUndoCommand):
                 mimeData.data("application/qt-nodes-graph")
             )
         elif mimeData.hasText():
-            json = QtCore.QJsonDocument.fromJson(mimeData.text().toUtf8())
+            json = QtCore.QJsonDocument.fromJson(
+                QtCore.QByteArray.fromStdString(mimeData.text())
+            )
 
         return json.object()
 

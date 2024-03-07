@@ -20,6 +20,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
 
         super().__init__(parent)
         self.setScene(scene)
+        self.setAcceptDrops(True)
 
         self._clearSelectionAction = None
         self._deleteSelectionAction = None
@@ -51,6 +52,21 @@ class GraphicsView(QtWidgets.QGraphicsView):
         maxSize = 32767
         self.setSceneRect(-maxSize, -maxSize, (maxSize * 2), (maxSize * 2))
 
+    def dragEnterEvent(self, event):
+        event.acceptProposedAction()
+
+    def dragMoveEvent(self, event):
+        event.acceptProposedAction()
+
+    def dropEvent(self, event):
+        from SpatialNode.data_flow_graphics_scene import DataFlowGraphicsScene
+
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            scene = self.scene()
+            if isinstance(scene, DataFlowGraphicsScene):
+                scene.loadUrl(urls[0].toLocalFile())
+
     def clearSelectionAction(self):
         return self._clearSelectionAction
 
@@ -60,9 +76,13 @@ class GraphicsView(QtWidgets.QGraphicsView):
     def setScene(self, scene):
         super().setScene(scene)
 
+        def setToolTip(action):
+            action.setToolTip(f"{action.toolTip()} ({action.shortcut().toString()})")
+
         self._clearSelectionAction = QtGui.QAction("Clear Selection", self)
-        self._clearSelectionAction.setShortcut(QtCore.Qt.Key.Key_Eacute)
+        self._clearSelectionAction.setShortcut(QtCore.Qt.Key.Key_Escape)
         self._clearSelectionAction.triggered.connect(scene.clearSelection)
+        setToolTip(self._clearSelectionAction)
         self.addAction(self._clearSelectionAction)
 
         self._deleteSelectionAction = QtGui.QAction("Delete Selection", self)
@@ -73,6 +93,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Delete)
         )
         self._deleteSelectionAction.triggered.connect(self.onDeleteSelectedObjects)
+        setToolTip(self._deleteSelectionAction)
         self.addAction(self._deleteSelectionAction)
 
         self._duplicateSelectionAction = QtGui.QAction("Duplicate Selection", self)
@@ -85,6 +106,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
         self._duplicateSelectionAction.triggered.connect(
             self.onDuplicateSelectedObjects
         )
+        setToolTip(self._duplicateSelectionAction)
         self.addAction(self._duplicateSelectionAction)
 
         self._copySelectionAction = QtGui.QAction("Copy Selection", self)
@@ -95,6 +117,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Copy)
         )
         self._copySelectionAction.triggered.connect(self.onCopySelectedObjects)
+        setToolTip(self._copySelectionAction)
         self.addAction(self._copySelectionAction)
 
         self._pasteAction = QtGui.QAction("Paste Selection", self)
@@ -103,6 +126,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Paste)
         )
         self._pasteAction.triggered.connect(self.onPasteObjects)
+        setToolTip(self._pasteAction)
         self.addAction(self._pasteAction)
 
         undoAction = scene.undoStack.createUndoAction(self, "&Undo")
