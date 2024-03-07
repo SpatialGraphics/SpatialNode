@@ -167,7 +167,7 @@ class DataFlowGraphModel(AbstractGraphModel, Serializable):
         from SpatialNode.definitions import NodeRole, PortType
         from SpatialNode.style_collection import StyleCollection
 
-        result = self._models[nodeId]
+        result = self._models.get(nodeId)
         if result is None:
             return result
 
