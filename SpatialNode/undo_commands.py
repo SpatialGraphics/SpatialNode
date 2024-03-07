@@ -54,19 +54,25 @@ def insertSerializedItems(json, scene):
         scene.nodeGraphicsObject(id).setZValue(1.0)
         scene.nodeGraphicsObject(id).setSelected(True)
 
-    connJsonArray = json["connections"].toVariantList()
+    connections = json.get("connections")
+    if connections:
+        connJsonArray = connections.toVariantList()
 
-    for connection in connJsonArray:
-        connId = fromJson(connection)
+        for connection in connJsonArray:
+            connId = fromJson(connection)
 
-        # Restore the connection
-        graphModel.addConnection(connId)
+            # Restore the connection
+            graphModel.addConnection(connId)
 
-        scene.connectionGraphicsObject(connId).setSelected(True)
+            scene.connectionGraphicsObject(connId).setSelected(True)
 
 
 def deleteSerializedItems(sceneJson, graphModel):
-    connectionJsonArray = sceneJson["connections"].toVariantList()
+    connections = sceneJson["connections"]
+    if isinstance(connections, QtCore.QJsonArray):
+        connectionJsonArray = connections.toVariantList()
+    else:
+        connectionJsonArray = connections.toArray().toVariantList()
 
     for connection in connectionJsonArray:
         connId = fromJson(connection)
@@ -134,7 +140,7 @@ class CreateCommand(QtGui.QUndoCommand):
 
     @override
     def redo(self):
-        if len(self._sceneJson) == 0 or len(self._sceneJson["nodes"].toArray()) == 0:
+        if len(self._sceneJson) == 0 or self._sceneJson["nodes"].toArray().size() == 0:
             return
         insertSerializedItems(self._sceneJson, self._scene)
 
