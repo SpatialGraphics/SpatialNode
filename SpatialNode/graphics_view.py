@@ -76,9 +76,13 @@ class GraphicsView(QtWidgets.QGraphicsView):
     def setScene(self, scene):
         super().setScene(scene)
 
+        def setToolTip(action):
+            action.setToolTip(f"{action.toolTip()} ({action.shortcut().toString()})")
+
         self._clearSelectionAction = QtGui.QAction("Clear Selection", self)
-        self._clearSelectionAction.setShortcut(QtCore.Qt.Key.Key_Eacute)
+        self._clearSelectionAction.setShortcut(QtCore.Qt.Key.Key_Escape)
         self._clearSelectionAction.triggered.connect(scene.clearSelection)
+        setToolTip(self._clearSelectionAction)
         self.addAction(self._clearSelectionAction)
 
         self._deleteSelectionAction = QtGui.QAction("Delete Selection", self)
@@ -89,6 +93,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Delete)
         )
         self._deleteSelectionAction.triggered.connect(self.onDeleteSelectedObjects)
+        setToolTip(self._deleteSelectionAction)
         self.addAction(self._deleteSelectionAction)
 
         self._duplicateSelectionAction = QtGui.QAction("Duplicate Selection", self)
@@ -101,6 +106,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
         self._duplicateSelectionAction.triggered.connect(
             self.onDuplicateSelectedObjects
         )
+        setToolTip(self._duplicateSelectionAction)
         self.addAction(self._duplicateSelectionAction)
 
         self._copySelectionAction = QtGui.QAction("Copy Selection", self)
@@ -111,6 +117,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Copy)
         )
         self._copySelectionAction.triggered.connect(self.onCopySelectedObjects)
+        setToolTip(self._copySelectionAction)
         self.addAction(self._copySelectionAction)
 
         self._pasteAction = QtGui.QAction("Paste Selection", self)
@@ -119,6 +126,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Paste)
         )
         self._pasteAction.triggered.connect(self.onPasteObjects)
+        setToolTip(self._pasteAction)
         self.addAction(self._pasteAction)
 
         undoAction = scene.undoStack.createUndoAction(self, "&Undo")
