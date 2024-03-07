@@ -20,6 +20,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
 
         super().__init__(parent)
         self.setScene(scene)
+        self.setAcceptDrops(True)
 
         self._clearSelectionAction = None
         self._deleteSelectionAction = None
@@ -50,6 +51,21 @@ class GraphicsView(QtWidgets.QGraphicsView):
         # re-calculation when expanding the all QGraphicsItems common rect.
         maxSize = 32767
         self.setSceneRect(-maxSize, -maxSize, (maxSize * 2), (maxSize * 2))
+
+    def dragEnterEvent(self, event):
+        event.acceptProposedAction()
+
+    def dragMoveEvent(self, event):
+        event.acceptProposedAction()
+
+    def dropEvent(self, event):
+        from SpatialNode.data_flow_graphics_scene import DataFlowGraphicsScene
+
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            scene = self.scene()
+            if isinstance(scene, DataFlowGraphicsScene):
+                scene.loadUrl(urls[0].toLocalFile())
 
     def clearSelectionAction(self):
         return self._clearSelectionAction

@@ -140,11 +140,6 @@ class DataFlowGraphicsScene(BasicGraphicsScene):
                 file.write(QtCore.QJsonDocument(self._graphModel.save()).toJson())
 
     def load(self):
-        from SpatialNode.data_flow_graph_model import DataFlowGraphModel
-
-        if not isinstance(self._graphModel, DataFlowGraphModel):
-            raise RuntimeError("_graphModel must be a DataFlowGraphModel")
-
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
             None, "Open Flow Scene", QtCore.QDir.homePath(), "Flow Scene Files (*.json)"
         )
@@ -152,9 +147,18 @@ class DataFlowGraphicsScene(BasicGraphicsScene):
         if not QtCore.QFileInfo.exists(fileName):
             return
 
+        self.loadUrl(fileName)
+
+    def loadUrl(self, fileName):
+        from SpatialNode.data_flow_graph_model import DataFlowGraphModel
+
+        if not isinstance(self._graphModel, DataFlowGraphModel):
+            raise RuntimeError("_graphModel must be a DataFlowGraphModel")
+
         file = QtCore.QFile(fileName)
 
         if not file.open(QtCore.QIODevice.OpenModeFlag.ReadOnly):
+            print(fileName)
             return
 
         self.clearScene()
