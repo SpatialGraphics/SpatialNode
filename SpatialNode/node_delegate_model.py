@@ -23,8 +23,8 @@ class NodeDelegateModel(QtCore.QObject, Serializable):
     def captionVisible(self):
         return True
 
-    @abstractmethod
-    def caption(self): ...
+    def caption(self):
+        return "NodeDelegateModel"
 
     def portCaptionVisible(self, port_type, port_index):
         return False
@@ -33,11 +33,10 @@ class NodeDelegateModel(QtCore.QObject, Serializable):
         return ""
 
     @staticmethod
-    @abstractmethod
-    def name(): ...
+    def name():
+        return "NodeDelegateModel"
 
     @staticmethod
-    @abstractmethod
     def register(registry, *args, **kwargs): ...
 
     @override
