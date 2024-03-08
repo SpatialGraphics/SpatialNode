@@ -27,13 +27,8 @@ class TextSourceDataModel(sNode.NodeDelegateModel):
 
     @staticmethod
     @override
-    def name():
-        return "TextSourceDataModel"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(TextSourceDataModel, TextSourceDataModel.name())
+        registry.registerModel(TextSourceDataModel, TextSourceDataModel.__name__)
 
     @override
     def nPorts(self, portType):

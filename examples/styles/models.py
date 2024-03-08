@@ -22,18 +22,13 @@ class MyDataModel(sNode.NodeDelegateModel):
 
     @staticmethod
     @override
-    def name():
-        return "MyDataModel"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(MyDataModel, MyDataModel.name())
+        registry.registerModel(MyDataModel, MyDataModel.__name__)
 
     @override
     def save(self):
         modelJson = sNode.QJsonObject()
-        modelJson["name"] = self.name()
+        modelJson["name"] = type(self).__name__
         return modelJson
 
     @override

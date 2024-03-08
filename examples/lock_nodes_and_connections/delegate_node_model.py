@@ -22,13 +22,8 @@ class SimpleDataModel(sNode.NodeDelegateModel):
 
     @staticmethod
     @override
-    def name():
-        return "SimpleDataModel"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(SimpleDataModel, SimpleDataModel.name())
+        registry.registerModel(SimpleDataModel, SimpleDataModel.__name__)
 
     @override
     def nPorts(self, portType):

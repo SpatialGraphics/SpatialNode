@@ -36,13 +36,8 @@ class DivisionModel(MathOperationDataModel):
 
     @staticmethod
     @override
-    def name():
-        return "Division"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(DivisionModel, DivisionModel.name(), "Operators")
+        registry.registerModel(DivisionModel, DivisionModel.__name__, "Operators")
 
     @override
     def compute(self):

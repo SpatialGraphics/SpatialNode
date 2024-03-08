@@ -18,13 +18,8 @@ class AdditionModel(MathOperationDataModel):
 
     @staticmethod
     @override
-    def name():
-        return "Addition"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(AdditionModel, AdditionModel.name(), "Operators")
+        registry.registerModel(AdditionModel, AdditionModel.__name__, "Operators")
 
     @override
     def compute(self):
