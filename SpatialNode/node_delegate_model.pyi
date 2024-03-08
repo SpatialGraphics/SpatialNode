@@ -22,7 +22,6 @@ class NodeDelegateModel(QtCore.QObject, Serializable, ABC):
         """It is possible to hide caption in GUI"""
         ...
 
-    @abstractmethod
     def caption(self) -> str:
         """
         Caption is used in GUI
@@ -44,7 +43,6 @@ class NodeDelegateModel(QtCore.QObject, Serializable, ABC):
         ...
 
     @staticmethod
-    @abstractmethod
     def name() -> str:
         """
         Name makes this model unique
@@ -52,7 +50,6 @@ class NodeDelegateModel(QtCore.QObject, Serializable, ABC):
         ...
 
     @staticmethod
-    @abstractmethod
     def register(registry, *args, **kwargs): ...
     @override
     def save(self): ...
