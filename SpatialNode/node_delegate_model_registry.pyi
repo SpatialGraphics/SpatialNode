@@ -13,7 +13,7 @@ class NodeDelegateModelRegistry:
 
     def __init__(self):
         self._registeredModelsCategory: dict[str, str] = None
-        self._categories: set[str] = None
+        self._categories: dict[str, str] = None
         self._registeredItemCreators: dict[str, lambda: NodeDelegateModel] = None
 
     def registerModel(

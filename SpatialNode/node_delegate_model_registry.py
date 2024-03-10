@@ -8,13 +8,13 @@
 class NodeDelegateModelRegistry:
     def __init__(self):
         self._registeredModelsCategory = {}
-        self._categories = set()
+        self._categories = {}
         self._registeredItemCreators = {}
 
     def registerModel(self, creator, name, category="Nodes"):
         if name not in self._registeredItemCreators:
             self._registeredItemCreators[name] = creator
-            self._categories.add(category)
+            self._categories[category] = ""
             self._registeredModelsCategory[name] = category
 
     def create(self, modelName):
@@ -26,4 +26,4 @@ class NodeDelegateModelRegistry:
         return self._registeredModelsCategory
 
     def categories(self):
-        return self._categories
+        return self._categories.keys()
