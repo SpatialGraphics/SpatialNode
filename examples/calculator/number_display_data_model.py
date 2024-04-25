@@ -28,14 +28,9 @@ class NumberDisplayDataModel(sNode.NodeDelegateModel):
 
     @staticmethod
     @override
-    def name():
-        return "Result"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
         registry.registerModel(
-            NumberDisplayDataModel, NumberDisplayDataModel.name(), "Displays"
+            NumberDisplayDataModel, NumberDisplayDataModel.__name__, "Displays"
         )
 
     @override

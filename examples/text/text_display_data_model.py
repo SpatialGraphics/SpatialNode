@@ -29,13 +29,8 @@ class TextDisplayDataModel(sNode.NodeDelegateModel):
 
     @staticmethod
     @override
-    def name():
-        return "TextDisplayDataModel"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(TextDisplayDataModel, TextDisplayDataModel.name())
+        registry.registerModel(TextDisplayDataModel, TextDisplayDataModel.__name__)
 
     @override
     def nPorts(self, portType):

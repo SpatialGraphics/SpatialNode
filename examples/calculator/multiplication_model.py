@@ -17,14 +17,9 @@ class MultiplicationModel(MathOperationDataModel):
 
     @staticmethod
     @override
-    def name():
-        return "Multiplication"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
         registry.registerModel(
-            MultiplicationModel, MultiplicationModel.name(), "Operators"
+            MultiplicationModel, MultiplicationModel.__name__, "Operators"
         )
 
     @override

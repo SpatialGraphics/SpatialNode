@@ -33,13 +33,8 @@ class SubtractionModel(MathOperationDataModel):
 
     @staticmethod
     @override
-    def name():
-        return "Subtraction"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
-        registry.registerModel(SubtractionModel, SubtractionModel.name(), "Operators")
+        registry.registerModel(SubtractionModel, SubtractionModel.__name__, "Operators")
 
     @override
     def compute(self):

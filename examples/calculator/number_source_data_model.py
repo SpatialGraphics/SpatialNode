@@ -28,14 +28,9 @@ class NumberSourceDataModel(sNode.NodeDelegateModel):
 
     @staticmethod
     @override
-    def name():
-        return "NumberSource"
-
-    @staticmethod
-    @override
     def register(registry: sNode.NodeDelegateModelRegistry, *args, **kwargs):
         registry.registerModel(
-            NumberSourceDataModel, NumberSourceDataModel.name(), "Sources"
+            NumberSourceDataModel, NumberSourceDataModel.__name__, "Sources"
         )
 
     @override

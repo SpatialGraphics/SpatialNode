@@ -33,16 +33,12 @@ class NodeDelegateModel(QtCore.QObject, Serializable):
         return ""
 
     @staticmethod
-    def name():
-        return "NodeDelegateModel"
-
-    @staticmethod
     def register(registry, *args, **kwargs): ...
 
     @override
     def save(self):
         modelJson = QJsonObject()
-        modelJson["model-name"] = self.name()
+        modelJson["model-name"] = type(self).__name__
         return modelJson
 
     @override

@@ -72,8 +72,6 @@ class DataFlowGraphicsScene(BasicGraphicsScene):
             item = QtWidgets.QTreeWidgetItem(parent[0])
             item.setText(0, assoc[0])
 
-        treeView.expandAll()
-
         def AA(item: QtWidgets.QTreeWidgetItem, count: int):
             from SpatialNode.undo_commands import CreateCommand
 
@@ -87,6 +85,7 @@ class DataFlowGraphicsScene(BasicGraphicsScene):
 
         # Setup filtering
         def Filter(text):
+            treeView.expandAll()
             categoryIt = QtWidgets.QTreeWidgetItemIterator(
                 treeView, QtWidgets.QTreeWidgetItemIterator.IteratorFlag.HasChildren
             )
